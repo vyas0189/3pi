@@ -159,7 +159,7 @@ int main()
     // set up the 3pi
     initialize();
     // global speed variable
-	int speed = 110;
+	int speed = 60;
 	int stop =0;
     char arr[100];
 	int index = 0;
@@ -168,46 +168,62 @@ int main()
         
         read_line(sensors,IR_EMITTERS_ON);
         // condition for u-turns
-		if(sensors[1] < 100 && sensors[2] < 100 && sensors[3] < 100 && sensors[0] < 100 && sensors[4] < 100)
+		if(sensors[1] < 100 && sensors[2] < 100 && sensors[3] < 100 && sensors[0] < 100 && sensors[4] < 100){
+			set_motors(30,30);
+			delay_ms(100);
+		while(sensors[1] < 100 && sensors[2] < 100 && sensors[3] < 100 && sensors[0] < 100 && sensors[4] < 100)
 		{
 			read_line(sensors,IR_EMITTERS_ON);
-			set_motors(30,30);
 			//delay_ms(50);
 			set_motors(-75,75);
-			delay_ms(100);
 			arr[index] = 'U';
-			
+			//if(sensors[1] > 100 || sensors[2] > 100 ||)
+				//breakk;		
 		} 
+		  delay_ms(10);
+		}
         // test for intersection
 		//left turn
-		else if(sensors[0] > 900){
-			if(sensors[4] > 900){
+		if(sensors[0] > 800){
+			//if(sensors[4] > 800){
 				// move forward a little bit
 				set_motors(40,40);
 				delay_ms(100);
 				// make a left turn
 				set_motors(-80,80);
 				delay_ms(150);
-			}else{
-			// move forward a little bit
-			set_motors(40,40);
-			delay_ms(100);
-			// make a left turn
-			set_motors(-80,80);
-			delay_ms(150);
-			}
+			//}else{
+			//	set_motors(40,40);
+			//	delay_ms(100);
+				// make a left turn
+			//	set_motors(-80,80);
+			//	delay_ms(150);
+			//}
 			arr[index] = 'L';
-		}
 			index++;
+		}else if((sensors[1] + sensors[2] + sensors[3] ) > 2500 && (sensors[0] + sensors[4]) < 200 ){
+			set_motors(75,75);
+		}
 		
 		
-		if((sensors[0] + sensors[1] + sensors[2] + sensors[3]+ sensors[4]) > 3000){
+		if((sensors[0] >800 && sensors[1] > 800 && sensors[2] > 800 && sensors[3]> 800 &&sensors[4] > 800)){
 			stop++;
+			set_motors(75,75);
+			delay_ms(50);
+			
+			read_line(sensors,IR_EMITTERS_ON);
+			if((sensors[0] >800 && sensors[1] > 800 && sensors[2] > 800 && sensors[3]> 00 &&sensors[4] > 800)){
+				set_motors(0,0);
+				while(1);
+			}else{
+				set_motors(-80,80);
+				delay_ms(10);
+			}
 			}else{
 			stop =0;
 		}
 		
-		if(stop > 55){
+		if(stop > 65){
 			set_motors(0,0);
 			break;
 		}
