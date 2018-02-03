@@ -151,6 +151,26 @@ void initialize()
 
 // This is the main function, where the code starts.  All C programs
 // must have a main() function defined somewhere.
+void turn(char dir){
+	switch(dir){
+		case 'L':
+			set_motors(40,40);
+			delay_ms(150);
+			set_motors(-80,80);
+			delay_ms(150);
+			break; 
+		case 'R': 
+			set_motors(40,40);
+			delay_ms(150);
+			set_motors(80,-80);
+			delay_ms(150);
+			break;
+		case 'B':
+			set_motors(80,-80); 
+			delay_ms(350); 
+			break;
+	}
+}
 int main()
 {
 	// unsigned int position = read_line(sensors,IR_EMITTERS_ON);
@@ -168,43 +188,56 @@ int main()
         
         read_line(sensors,IR_EMITTERS_ON);
         // condition for u-turns
-		if(sensors[1] < 100 && sensors[2] < 100 && sensors[3] < 100 && sensors[0] < 100 && sensors[4] < 100){
-			set_motors(30,30);
-			delay_ms(100);
-		while(sensors[1] < 100 && sensors[2] < 100 && sensors[3] < 100 && sensors[0] < 100 && sensors[4] < 100)
-		{
+		//if(sensors[1] < 100 && sensors[2] < 100 && sensors[3] < 100 && sensors[0] < 100 && sensors[4] < 100){
+			//set_motors(30,30);
+			//delay_ms(100);
+		//while(sensors[1] < 100 && sensors[2] < 100 && sensors[3] < 100 && sensors[0] < 100 && sensors[4] < 100)
+		//{
+			//read_line(sensors,IR_EMITTERS_ON);
+			////delay_ms(50);
+			//set_motors(-75,75);
+			//arr[index] = 'U';
+			////if(sensors[1] > 100 || sensors[2] > 100 ||)
+				////breakk;		
+		//} 
+		  //delay_ms(10);
+		//}
+		//u-Turn
+		while(sensors[1] < 100 && sensors[2] < 100 && sensors[3] < 100) { 
 			read_line(sensors,IR_EMITTERS_ON);
-			//delay_ms(50);
-			set_motors(-75,75);
-			arr[index] = 'U';
-			//if(sensors[1] > 100 || sensors[2] > 100 ||)
-				//breakk;		
-		} 
-		  delay_ms(10);
-		}
+			turn('B');
+			break;
+		 }
+		 
         // test for intersection
 		//left turn
-		if(sensors[0] > 800){
-			//if(sensors[4] > 800){
-				// move forward a little bit
-				set_motors(40,40);
-				delay_ms(100);
-				// make a left turn
-				set_motors(-80,80);
-				delay_ms(150);
-			//}else{
-			//	set_motors(40,40);
-			//	delay_ms(100);
-				// make a left turn
-			//	set_motors(-80,80);
-			//	delay_ms(150);
-			//}
+		while(sensors[0] > 450 && sensors[4] > 450){
+				read_line(sensors,IR_EMITTERS_ON);
+				turn('L');
+				break;
+			}
+		while(sensors[0] > 400){
+			read_line(sensors,IR_EMITTERS_ON);
+			turn('L');
 			arr[index] = 'L';
 			index++;
-		}else if((sensors[1] + sensors[2] + sensors[3] ) > 2500 && (sensors[0] + sensors[4]) < 200 ){
+			
+			if((sensors[1] + sensors[2] + sensors[3] ) > 2500 && (sensors[0] + sensors[4]) < 200 ){
+				set_motors(75,75);
+			}
+			break;
+		} 
+		
+		while(sensors[4] > 450){
+			read_line(sensors,IR_EMITTERS_ON);
+			turn('R');
+			
+		 if((sensors[1] + sensors[2] + sensors[3] ) > 2500 && (sensors[0] + sensors[4]) < 200 ){
 			set_motors(75,75);
 		}
-		
+		break;
+	}
+
 		
 		if((sensors[0] >800 && sensors[1] > 800 && sensors[2] > 800 && sensors[3]> 800 &&sensors[4] > 800)){
 			stop++;
@@ -215,7 +248,7 @@ int main()
 			if((sensors[0] >800 && sensors[1] > 800 && sensors[2] > 800 && sensors[3]> 00 &&sensors[4] > 800)){
 				set_motors(0,0);
 				while(1);
-			}else{
+				}else{
 				set_motors(-80,80);
 				delay_ms(10);
 			}
@@ -243,7 +276,7 @@ int main()
 		
 	}
 	while(!button_is_pressed(BUTTON_B)){
-		
+		print("Stopped");
 	}
 	while(1);
 	
